@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<IDataXMLCoder version="1.0">
+  <record javaclass="com.wm.data.ISMemDataImpl">
+    <value name="alias">local</value>
+    <value name="dbURL">jdbc:wm:sqlserver://vmssin01.eur.ad.sag:1433;databaseName=mano</value>
+    <value name="userid">mano</value>
+    <byte name="pswd">
+YldGdWJ3PT0=    </byte>
+    <value name="driverAlias">DataDirect Connect JDBC SQL Server Driver</value>
+  </record>
+</IDataXMLCoder>
