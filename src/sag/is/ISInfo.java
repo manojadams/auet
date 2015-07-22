@@ -22,8 +22,8 @@ import org.w3c.dom.NodeList;
 
 public class ISInfo {
 	
-	private static int lowComplexity = 102400;
-	private static int medComplexity = 204800;
+	private static int lowComplexity = 10240;
+	private static int medComplexity = 51200;
 	private static int highComplexity;
 	
 	static int msg_count=0;
@@ -375,7 +375,7 @@ public class ISInfo {
 			 String pathToInstances = this.sag_directory+"/IntegrationServer/instances";
 			 File file = new File(pathToInstances);
 			 String[] instances = file.list(new FilenameFilter(){
-				@Override
+//				@Override
 				public boolean accept(File current, String name) {
 				    return new File(current, name).isDirectory();
 				  }
@@ -570,47 +570,38 @@ public class ISInfo {
 			    			if(nodeType.equals("record"))
 			    			{
 			    				return "record";
-			    				//System.out.println("record");
-			    				//break;
+			    				
 			    			}
 			    			else if(nodeType.equals("java"))
 			    			{
 			    				return "java";
-			    				//System.out.println("java");
-			    				//break;
+			    				
 			       			}
 			    			else if(nodeType.equals("flow"))
 			    			{
 			    				return "flow";
-			    				//System.out.println("flow");
-			    				//break;
+			    				
 			    			}
 			    			else if(nodeType.equals("webServiceDescriptor"))
 			    			{
 			    				return "wsdl";
-			    				//System.out.println("flow");
-			    				//break;
+			    				
 			    			}
 			    			else if(nodeType.equals("AdapterService"))
 			    			{
 			    				return "adapter";
-			    				//System.out.println("flow");
-			    				//break;
+			    				
 			    			}
 			    			else if(nodeType.equals("webMethods"))
 			    			{
 			    				return "webM";
-			    				//System.out.println(webM);
-			    				//break;
+			    				
 			    			}
 			
 			    		
 			    		}
 			    		
 			    		}
-			    	//System.out.println("Record count:"+record);
-					//System.out.println("Flow count:"+flow);
-					//System.out.println("Java count:"+java);
 					
 			    }
 			    catch (Exception e) {

@@ -1,5 +1,7 @@
 package sag.is;
 
+//service node containing: 
+//service type, service complexity and service size
 public class SvcNode {
 	public String nodeType;
 	public long nodeSize;

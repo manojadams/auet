@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
@@ -19,6 +20,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import auet.utils.Logger;
 
 //represents one package instance
 public class ISNode {
@@ -48,13 +50,23 @@ public class ISNode {
 		public int lowDocComplexityCount;
 		public int medDocComplexityCount;
 		public int highDocComplexityCount;
+	public int webServiceCounts;
+		public int lowWsComplexityCount;
+		public int medWsComplexityCount;
+		public int highWsComplexityCount;
+	public int miscCounts;
+		public int lowMiscComplexityCount;
+		public int medMiscComplexityCount;
+		public int highMiscComplexityCount;
 	private String packageComplexity;
-	protected FileWriter logger;
+		public int lowPkgComplexityCount;
+		public int medPkgComplexityCount;
+		public int highPkgComplexityCount;
+	
 	
 	public ISNode(String ISPath, String ISInstance) throws IOException{//integration server path
 		
 		this.ISPath = ISPath;
-		this.logger = new FileWriter("logger.txt",true);
 		this.validate();
 		this.includeWMPackages = true;
 		if(this.isValid){
@@ -62,16 +74,12 @@ public class ISNode {
 			this.pathToInstancePkg = this.ISPath+"/packages";
 			this.pathToInstance = this.ISPath;
 		} else {
-//			this.pathToInstancePkg = this.ISPath+"/instances/"+ISInstance+"/packages";
-//			this.pathToInstance = this.ISPath+"/instances/"+ISInstance;
 			this.pathToInstancePkg = ISInstance+"/packages";
 			this.pathToInstance = ISInstance;
 		}
 		
 		this.packages = this.processPackages();
-		//this.packageCount = this.getPackageCount();
 		
-		//System.out.println(this.packageCount+this.packages.length);
 		nodes = new ArrayList<String>();
 //		this.getNodesList();
 //		this.displayNodesList();
@@ -102,7 +110,7 @@ public class ISNode {
 		int count=0;
 			
 		if (this.packages.length == 0){
-				System.out.println("The directory is empty");
+				Logger.log("The Packages directory is empty");
 		} 
 		else {
 			for (String aFile : this.packages){
@@ -119,7 +127,7 @@ public class ISNode {
 		return dir.list();
 		
 	}
-//find nodes
+//	find nodes
 	public void getNodesList(Text details) throws IOException{
 		
 		if(this.includeWMPackages){
@@ -153,7 +161,7 @@ public class ISNode {
 	//print nodes
 	public void displayNodesList(){
 		for(String s:this.nodes){
-			System.out.println(s);
+			Logger.log("IS nodes:"+s);
 		}
 	}
 	
@@ -185,28 +193,28 @@ public class ISNode {
     					{
     						String aliasName=eElement.getTextContent();
     						//saves("Alias Name",aliasName);
-    						System.out.println(aliasName);
+    						Logger.log("Messaging Node:\t"+aliasName);
     					}
     		
     				else if(name.equalsIgnoreCase("type"))
     					{
     						String typeName=eElement.getTextContent();
 //    						saves("Type",typeName);
-    						System.out.println(typeName);
+    						Logger.log("Messaging Node type:\t"+typeName);
     					}
     		
     				else if(name.equalsIgnoreCase("brokerName"))
     					{
     						String brokerName=eElement.getTextContent();
 //    						saves("Broker Name",brokerName);
-    						System.out.println(brokerName);
+    						Logger.log("Broker Name:\t"+brokerName);
     					}
     		
     				else if(name.equalsIgnoreCase("um_rname"))
     					{	
     						String um_rName=eElement.getTextContent();
 //    						saves("UM Realm Name",um_rName);
-    						System.out.println(um_rName);
+    						Logger.log("UR_Rname"+um_rName);
     					}
     		
     		
@@ -243,8 +251,7 @@ public class ISNode {
 		    				if(name.equalsIgnoreCase("alias"))
 		    					{
 		    						String aliasName = eElement.getTextContent();
-//			    						saves("Remote server Alias Name",aliasName);
-		    						System.out.println(aliasName);
+		    						Logger.log(aliasName);
 		    						if(aliasName!=null && !aliasName.equals("")) remoteServers.add(aliasName);
 		    					}
 		    			
@@ -284,7 +291,7 @@ public class ISNode {
     					{
     						String userName = eElement.getTextContent();
     						if(userName!=null && !userName.equals("")) users.add(userName);
-    						System.out.println(userName);
+    						Logger.log("User name:\t"+userName);
     						
     					}
     			
@@ -324,7 +331,7 @@ public class ISNode {
 		    				if(name.equalsIgnoreCase("name"))
 		    					{
 		    						String aclName=eElement.getTextContent();
-		    						System.out.println(aclName);
+		    						Logger.log("ACL Name:\t"+aclName);
 		    						if(aclName!=null && !aclName.equals("")) acls.add(aclName);
 		    						
 		    					}
@@ -362,7 +369,7 @@ public class ISNode {
 					{
 						String aliasName=eElement.getTextContent();
 //						saves("JMS Alias Name",aliasName);
-						System.out.println(aliasName);
+						Logger.log("JMS Name:\t"+aliasName);
 						if(aliasName!=null && !aliasName.equals("")) jmsQueue.add(aliasName);
 						
 					}
@@ -379,8 +386,7 @@ public class ISNode {
 		try{
 		for(String n:nodes){
 			String svcType = ISInfo.getServiceType(n);						//get service type
-			System.out.println(svcType);
-			this.logger.write(svcType);
+			Logger.log("Service Type:\t"+svcType);
 			long svcSize = ISInfo.getServiceSize(n);						//get service size
 			String svcComplexity = ISInfo.getServiceComplexity(svcSize);	//get service complexity
 			SvcNode svcNode = new SvcNode(svcType,svcSize,svcComplexity,n);
@@ -394,7 +400,7 @@ public class ISNode {
 	//gets all service counts
 	public void getServiceCount(){
 		
-		int flowCount = 0, javaCount = 0, docCount = 0;
+		int flowCount = 0, javaCount = 0, docCount = 0, webServiceCount = 0, miscCount = 0;
 		for(SvcNode s:this.svcNodes){
 			if(s.nodeType.equals("flow")){
 				flowCount++;
@@ -420,7 +426,7 @@ public class ISNode {
 					highJavaComplexityCount++;
 				}
 			}
-			else if(s.nodeType.equals("doc")){
+			else if(s.nodeType.equals("record")){
 				docCount++;
 				if(s.nodeComplexty.equals("low")){
 					lowDocComplexityCount++;
@@ -432,11 +438,37 @@ public class ISNode {
 					highDocComplexityCount++;
 				}
 			}
+			else if(s.nodeType.equals("wsdl")){
+				webServiceCount++;
+				if(s.nodeComplexty.equals("low")){
+					lowWsComplexityCount++;
+				}
+				else if(s.nodeComplexty.equals("medium")){
+					medWsComplexityCount++;
+				} 
+				else if(s.nodeComplexty.equals("high")){
+					highWsComplexityCount++;
+				}
+			}
+			else{
+				miscCount++;
+				if(s.nodeComplexty.equals("low")){
+					lowMiscComplexityCount++;
+				}
+				else if(s.nodeComplexty.equals("medium")){
+					medMiscComplexityCount++;
+				} 
+				else if(s.nodeComplexty.equals("high")){
+					highMiscComplexityCount++;
+				}
+			}
 			
 		}
 		this.flowCounts = flowCount;
 		this.javaCounts = javaCount;
 		this.docCounts = docCount;
+		this.webServiceCounts = webServiceCount;
+		this.miscCounts = miscCount;
 	}
 	
 	//start processing IS node
@@ -446,20 +478,24 @@ public class ISNode {
 		nodes = new ArrayList<String>();
 		try {
 			
-//			progressBar.setSelection(20);
+			progressBar.setState(SWT.NORMAL);
+			progressBar.setSelection(20);
 			this.getNodesList(details);
-//			progressBar.setSelection(40);
+			progressBar.setSelection(40);
 			this.processNodes();
+			progressBar.setSelection(55);
 			this.getServiceCount();
-			//this.processSeviceTypes();
-			//this.getNodesList(details);
+			progressBar.setSelection(60);
 			this.displayNodesList();
 			this.processMessagingInfo();
 			this.processAclInfo();
+			progressBar.setSelection(70);
 			this.processRemoteServersInfo();
+			progressBar.setSelection(80);
 			this.processUsersInfo();
+			progressBar.setSelection(90);
 			this.processJmsQueue();
-//			progressBar.setSelection(100);
+			progressBar.setSelection(100);
 			
 		} catch(IOException e){
 			e.printStackTrace();

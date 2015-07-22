@@ -1,0 +1,9 @@
+AUET::22/07/2015 10:54:34=>	Logger started
+AUET::22/07/2015 10:54:34=>	AUET GUI started
+AUET::22/07/2015 10:54:35=>	Logger stopped
+AUET::22/07/2015 10:55:20=>	Logger started
+AUET::22/07/2015 10:55:20=>	AUET GUI started
+AUET::22/07/2015 10:55:20=>	Logger stopped
+AUET::22/07/2015 11:04:18=>	Logger started
+AUET::22/07/2015 11:04:18=>	AUET GUI started
+AUET::22/07/2015 11:04:23=>	Logger stopped
